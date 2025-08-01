@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TALENT Model Hyperparameter Viewer</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f7f7f9; color: #333; }
+    h1 { font-size: 28px; margin-bottom: 20px; }
+
+    .model { background: white; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 16px; }
+    .model-header { background: #e9ecef; padding: 10px 14px; font-weight: bold; cursor: pointer; font-size: 18px; border-bottom: 1px solid #ccc; }
+    .config-content { display: none; padding: 14px; }
+    .section-title { margin-top: 14px; margin-bottom: 6px; font-weight: bold; font-size: 16px; }
+    pre code { display: block; overflow-x: auto; padding: 10px; border-radius: 6px; background: #f6f8fa; }
+
+    /* Floating search box */
+    #floating-search {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: #ffffffee;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        z-index: 999;
+        max-width: 250px;
+        transition: all 0.3s ease;
+    }
+    #search-input { padding: 8px; font-size: 14px; width: 100%; margin-top: 6px; }
+    .toggle-btn { cursor: pointer; background: none; border: none; font-size: 16px; font-weight: bold; }
+
+    /* Scroll buttons */
+    .scroll-buttons {
+        position: fixed;
+        bottom: 16px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        z-index: 998;
+    }
+    .scroll-btn {
+        background: #eee;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 6px 10px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<h1>TALENT Model Hyperparameter Viewer</h1>
+
+<!-- Floating Search Box -->
+<div id="floating-search">
+  <button class="toggle-btn" onclick="toggleSearchBox()">🔍 Search</button>
+  <input id="search-input" type="text" placeholder="Type model name..." oninput="filterModels(this.value)">
+</div>
+
+<!-- Scroll Buttons -->
+<div class="scroll-buttons">
+  <button class="scroll-btn" onclick="scrollToTop()">⬆ Top</button>
+  <button class="scroll-btn" onclick="scrollToBottom()">⬇ Bottom</button>
+</div>
+
+<div class="model" data-model="linearregression">
+  <div class="model-header" onclick="toggleContent(this)">📂 LinearRegression</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="logreg">
+  <div class="model-header" onclick="toggleContent(this)">📂 LogReg</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-1-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-1-default-Model Parameters">{
+  &quot;penalty&quot;: &quot;l2&quot;,
+  &quot;max_iter&quot;: 5000
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-1-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-1-opt-Model Search Space">{
+  &quot;C&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    5
+  ],
+  &quot;penalty&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;l2&quot;,
+      null
+    ]
+  ],
+  &quot;max_iter&quot;: [
+    &quot;int&quot;,
+    50,
+    500
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="ncm">
+  <div class="model-header" onclick="toggleContent(this)">📂 NCM</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="naivebayes">
+  <div class="model-header" onclick="toggleContent(this)">📂 NaiveBayes</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="pfn-v2">
+  <div class="model-header" onclick="toggleContent(this)">📂 PFN-v2</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">General Parameters <button class="btn" onclick="copyToClipboard('copy-model-4-default-General Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-4-default-General Parameters">{
+  &quot;sample_size&quot;: 10000
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">General Search Space <button class="btn" onclick="copyToClipboard('copy-model-4-opt-General Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-4-opt-General Search Space">{
+  &quot;sample_size&quot;: 10000
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="randomforest">
+  <div class="model-header" onclick="toggleContent(this)">📂 RandomForest</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-5-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-5-default-Model Parameters">{
+  &quot;max_depth&quot;: 12,
+  &quot;n_estimators&quot;: 2000
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-5-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-5-opt-Model Search Space">{
+  &quot;min_samples_split&quot;: [
+    &quot;int&quot;,
+    2,
+    10
+  ],
+  &quot;min_samples_leaf&quot;: [
+    &quot;int&quot;,
+    1,
+    10
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="amformer">
+  <div class="model-header" onclick="toggleContent(this)">📂 amformer</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-6-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-6-default-Model Parameters">{
+  &quot;dim&quot;: 192,
+  &quot;depth&quot;: 3,
+  &quot;heads&quot;: 8,
+  &quot;attn_dropout&quot;: 0.2,
+  &quot;ff_dropout&quot;: 0.1,
+  &quot;groups&quot;: [
+    54,
+    54,
+    54
+  ],
+  &quot;sum_num_per_group&quot;: [
+    32,
+    16,
+    8
+  ],
+  &quot;prod_num_per_group&quot;: [
+    6,
+    6,
+    6
+  ],
+  &quot;cluster&quot;: true,
+  &quot;target_mode&quot;: &quot;mix&quot;,
+  &quot;token_descent&quot;: false,
+  &quot;num_special_tokens&quot;: 2
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-6-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-6-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-6-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-6-opt-Model Search Space">{
+  &quot;depth&quot;: [
+    &quot;int&quot;,
+    1,
+    4
+  ],
+  &quot;dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;attn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ff_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;num_special_tokens&quot;: [
+    &quot;int&quot;,
+    1,
+    4
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-6-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-6-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="autoint">
+  <div class="model-header" onclick="toggleContent(this)">📂 autoint</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-7-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-7-default-Model Parameters">{
+  &quot;n_layers&quot;: 3,
+  &quot;d_token&quot;: 64,
+  &quot;n_heads&quot;: 8,
+  &quot;attention_dropout&quot;: 0.2,
+  &quot;residual_dropout&quot;: 0.0,
+  &quot;activation&quot;: &quot;relu&quot;,
+  &quot;prenormalization&quot;: false,
+  &quot;initialization&quot;: &quot;kaiming&quot;,
+  &quot;kv_compression&quot;: null,
+  &quot;kv_compression_sharing&quot;: null
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-7-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-7-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-7-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-7-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    6
+  ],
+  &quot;d_token&quot;: [
+    &quot;categorical&quot;,
+    [
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;residual_dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.2
+  ],
+  &quot;attention_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-7-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-7-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="bishop">
+  <div class="model-header" onclick="toggleContent(this)">📂 bishop</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-8-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-8-default-Model Parameters">{
+  &quot;emb_dim&quot;: 32,
+  &quot;out_dim&quot;: 24,
+  &quot;patch_dim&quot;: 8,
+  &quot;factor&quot;: 10,
+  &quot;n_agg&quot;: 4,
+  &quot;d_model&quot;: 512,
+  &quot;d_ff&quot;: 256,
+  &quot;n_heads&quot;: 4,
+  &quot;e_layer&quot;: 2,
+  &quot;d_layer&quot;: 2,
+  &quot;emb_dropout&quot;: 0.1,
+  &quot;dropout&quot;: 0.2,
+  &quot;share_div&quot;: 8,
+  &quot;mlp_dropout&quot;: 0.2,
+  &quot;hopfield&quot;: true
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-8-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-8-default-Training Parameters">{
+  &quot;lr&quot;: 5e-05,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-8-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-8-opt-Model Search Space">{
+  &quot;emb_dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      16,
+      24,
+      32,
+      48,
+      64,
+      128,
+      256,
+      320
+    ]
+  ],
+  &quot;out_dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;patch_dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      1,
+      2,
+      4,
+      6,
+      8,
+      12,
+      16,
+      24
+    ]
+  ],
+  &quot;n_agg&quot;: [
+    &quot;categorical&quot;,
+    [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  ],
+  &quot;factor&quot;: [
+    &quot;categorical&quot;,
+    [
+      5,
+      10,
+      15
+    ]
+  ],
+  &quot;d_model&quot;: [
+    &quot;categorical&quot;,
+    [
+      64,
+      128,
+      256,
+      512,
+      1024
+    ]
+  ],
+  &quot;d_ff&quot;: [
+    &quot;categorical&quot;,
+    [
+      128,
+      256,
+      512,
+      1024
+    ]
+  ],
+  &quot;n_heads&quot;: [
+    &quot;categorical&quot;,
+    [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12
+    ]
+  ],
+  &quot;e_layer&quot;: [
+    &quot;categorical&quot;,
+    [
+      2,
+      3,
+      4,
+      5
+    ]
+  ],
+  &quot;d_layer&quot;: [
+    &quot;categorical&quot;,
+    [
+      0,
+      1
+    ]
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-8-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-8-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.0001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="catboost">
+  <div class="model-header" onclick="toggleContent(this)">📂 catboost</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Fit Parameters <button class="btn" onclick="copyToClipboard('copy-model-9-default-Fit Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-9-default-Fit Parameters">{
+  &quot;logging_level&quot;: &quot;Silent&quot;
+}</code></pre>
+
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-9-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-9-default-Model Parameters">{
+  &quot;early_stopping_rounds&quot;: 50,
+  &quot;n_estimators&quot;: 2000,
+  &quot;od_pval&quot;: 0.001
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-9-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-9-opt-Model Search Space">{
+  &quot;bagging_temperature&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    1.0
+  ],
+  &quot;depth&quot;: [
+    &quot;int&quot;,
+    3,
+    10
+  ],
+  &quot;l2_leaf_reg&quot;: [
+    &quot;loguniform&quot;,
+    1.0,
+    10.0
+  ],
+  &quot;leaf_estimation_iterations&quot;: [
+    &quot;int&quot;,
+    1,
+    10
+  ],
+  &quot;learning_rate&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    1
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="danets">
+  <div class="model-header" onclick="toggleContent(this)">📂 danets</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-10-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-10-default-Model Parameters">{
+  &quot;base_outdim&quot;: 64,
+  &quot;n_layers&quot;: 20,
+  &quot;dropout&quot;: 0.1
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-10-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-10-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+<div class="section-title">General Parameters <button class="btn" onclick="copyToClipboard('copy-model-10-default-General Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-10-default-General Parameters">{
+  &quot;k&quot;: 5,
+  &quot;virtual_batch_size&quot;: 256
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-10-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-10-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    6,
+    32
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ],
+  &quot;base_outdim&quot;: [
+    &quot;int&quot;,
+    64,
+    128
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-10-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-10-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="dcn2">
+  <div class="model-header" onclick="toggleContent(this)">📂 dcn2</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-11-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-11-default-Model Parameters">{
+  &quot;d&quot;: 512,
+  &quot;n_hidden_layers&quot;: 2,
+  &quot;n_cross_layers&quot;: 3,
+  &quot;hidden_dropout&quot;: 0.1,
+  &quot;cross_dropout&quot;: 0.1,
+  &quot;stacked&quot;: false,
+  &quot;d_embedding&quot;: 64
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-11-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-11-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-11-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-11-opt-Model Search Space">{
+  &quot;d&quot;: [
+    &quot;int&quot;,
+    64,
+    512
+  ],
+  &quot;d_embedding&quot;: [
+    &quot;int&quot;,
+    64,
+    512
+  ],
+  &quot;hidden_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;cross_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;n_cross_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    8
+  ],
+  &quot;n_hidden_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    8
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-11-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-11-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="dnnr">
+  <div class="model-header" onclick="toggleContent(this)">📂 dnnr</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-12-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-12-default-Model Parameters">{
+  &quot;n_neighbors&quot;: 3,
+  &quot;n_derivative_neighbors&quot;: 128,
+  &quot;order&quot;: &quot;1&quot;,
+  &quot;solver&quot;: &quot;linear_regression&quot;,
+  &quot;index&quot;: &quot;annoy&quot;
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-12-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-12-opt-Model Search Space">{
+  &quot;n_neighbors&quot;: [
+    &quot;int&quot;,
+    3,
+    3
+  ],
+  &quot;n_derivative_neighbors&quot;: [
+    &quot;int&quot;,
+    32,
+    1024
+  ],
+  &quot;order&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;1&quot;,
+      &quot;2diag&quot;
+    ]
+  ],
+  &quot;solver&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;linear_regression&quot;,
+      &quot;scipy_lsqr&quot;,
+      &quot;numpy&quot;,
+      &quot;ridge&quot;,
+      &quot;lasso&quot;
+    ]
+  ],
+  &quot;index&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;annoy&quot;
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="dummy">
+  <div class="model-header" onclick="toggleContent(this)">📂 dummy</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="excelformer">
+  <div class="model-header" onclick="toggleContent(this)">📂 excelformer</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-14-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-14-default-Model Parameters">{
+  &quot;prenormalization&quot;: true,
+  &quot;kv_compression&quot;: null,
+  &quot;kv_compression_sharing&quot;: null,
+  &quot;token_bias&quot;: true,
+  &quot;ffn_dropout&quot;: 0,
+  &quot;attention_dropout&quot;: 0.3,
+  &quot;residual_dropout&quot;: 0.0,
+  &quot;n_layers&quot;: 3,
+  &quot;n_heads&quot;: 32,
+  &quot;d_token&quot;: 256,
+  &quot;init_scale&quot;: 0.01
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-14-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-14-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0,
+  &quot;mix_type&quot;: &quot;none&quot;
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-14-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-14-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    2,
+    5
+  ],
+  &quot;d_token&quot;: [
+    &quot;categorical&quot;,
+    [
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;residual_dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ],
+  &quot;attention_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ffn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-14-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-14-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ],
+  &quot;mix_type&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;none&quot;,
+      &quot;feat_mix&quot;,
+      &quot;hidden_mix&quot;
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="ftt">
+  <div class="model-header" onclick="toggleContent(this)">📂 ftt</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-15-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-15-default-Model Parameters">{
+  &quot;token_bias&quot;: true,
+  &quot;n_layers&quot;: 3,
+  &quot;d_token&quot;: 192,
+  &quot;n_heads&quot;: 8,
+  &quot;d_ffn_factor&quot;: 1.3333333333333333,
+  &quot;attention_dropout&quot;: 0.2,
+  &quot;ffn_dropout&quot;: 0.1,
+  &quot;residual_dropout&quot;: 0.0,
+  &quot;activation&quot;: &quot;reglu&quot;,
+  &quot;prenormalization&quot;: false,
+  &quot;initialization&quot;: &quot;kaiming&quot;,
+  &quot;kv_compression&quot;: null,
+  &quot;kv_compression_sharing&quot;: null
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-15-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-15-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-15-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-15-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    4
+  ],
+  &quot;d_token&quot;: [
+    &quot;categorical&quot;,
+    [
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;residual_dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.2
+  ],
+  &quot;attention_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ffn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;d_ffn_factor&quot;: [
+    &quot;uniform&quot;,
+    0.6666666666666667,
+    2.6666666666666665
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-15-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-15-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="grande">
+  <div class="model-header" onclick="toggleContent(this)">📂 grande</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-16-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-16-default-Model Parameters">{
+  &quot;depth&quot;: 5,
+  &quot;n_estimators&quot;: 2048,
+  &quot;from_logits&quot;: true,
+  &quot;use_class_weights&quot;: true,
+  &quot;selected_variables&quot;: 0.8,
+  &quot;data_subset_fraction&quot;: 1.0,
+  &quot;dropout&quot;: 0.0,
+  &quot;bootstrap&quot;: false
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-16-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-16-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-16-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-16-opt-Model Search Space">{
+  &quot;depth&quot;: [
+    &quot;int&quot;,
+    3,
+    7
+  ],
+  &quot;n_estimators&quot;: [
+    &quot;int&quot;,
+    512,
+    2048
+  ],
+  &quot;selected_variables&quot;: [
+    &quot;categorical&quot;,
+    [
+      1,
+      0.75,
+      0.5
+    ]
+  ],
+  &quot;data_subset_fraction&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.8,
+      1.0
+    ]
+  ],
+  &quot;dropout&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.0,
+      0.25
+    ]
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-16-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-16-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    0.0001,
+    0.25
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="grownet">
+  <div class="model-header" onclick="toggleContent(this)">📂 grownet</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Ensemble_model Parameters <button class="btn" onclick="copyToClipboard('copy-model-17-default-Ensemble_model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-default-Ensemble_model Parameters">{
+  &quot;lr&quot;: 1.0,
+  &quot;d_embedding&quot;: 128
+}</code></pre>
+
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-17-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-default-Model Parameters">{
+  &quot;hidden_d&quot;: 128,
+  &quot;sparse&quot;: false
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-17-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002,
+  &quot;epochs_per_stage&quot;: 1,
+  &quot;lr_scaler&quot;: 3,
+  &quot;correct_epoch&quot;: 1
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Ensemble_model Search Space <button class="btn" onclick="copyToClipboard('copy-model-17-opt-Ensemble_model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-opt-Ensemble_model Search Space">{
+  &quot;d_embedding&quot;: [
+    &quot;int&quot;,
+    32,
+    512
+  ]
+}</code></pre>
+
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-17-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-opt-Model Search Space">{
+  &quot;hidden_d&quot;: [
+    &quot;int&quot;,
+    32,
+    512
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-17-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-17-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ],
+  &quot;epochs_per_stage&quot;: [
+    &quot;int&quot;,
+    1,
+    2
+  ],
+  &quot;correct_epoch&quot;: [
+    &quot;int&quot;,
+    1,
+    2
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="hyperfast">
+  <div class="model-header" onclick="toggleContent(this)">📂 hyperfast</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="knn">
+  <div class="model-header" onclick="toggleContent(this)">📂 knn</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-19-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-19-default-Model Parameters">{
+  &quot;weights&quot;: &quot;distance&quot;,
+  &quot;algorithm&quot;: &quot;auto&quot;,
+  &quot;p&quot;: 2,
+  &quot;metric&quot;: &quot;minkowski&quot;
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-19-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-19-opt-Model Search Space">{
+  &quot;n_neighbors&quot;: [
+    &quot;int&quot;,
+    1,
+    128
+  ],
+  &quot;weights&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;uniform&quot;,
+      &quot;distance&quot;
+    ]
+  ],
+  &quot;p&quot;: [
+    &quot;categorical&quot;,
+    [
+      1,
+      1.5,
+      2,
+      2.5,
+      3
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="lightgbm">
+  <div class="model-header" onclick="toggleContent(this)">📂 lightgbm</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-20-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-20-default-Model Parameters">{
+  &quot;n_estimators&quot;: 2000
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-20-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-20-opt-Model Search Space">{
+  &quot;num_leaves&quot;: [
+    &quot;int&quot;,
+    10,
+    100
+  ],
+  &quot;max_depth&quot;: [
+    &quot;int&quot;,
+    3,
+    10
+  ],
+  &quot;learning_rate&quot;: [
+    &quot;loguniform&quot;,
+    0.001,
+    1.0
+  ],
+  &quot;min_child_weight&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;min_child_samples&quot;: [
+    &quot;int&quot;,
+    2,
+    100
+  ],
+  &quot;subsample&quot;: [
+    &quot;uniform&quot;,
+    0.5,
+    1.0
+  ],
+  &quot;colsample_bytree&quot;: [
+    &quot;uniform&quot;,
+    0.5,
+    1.0
+  ],
+  &quot;reg_lambda&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-05,
+    1.0
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="linear">
+  <div class="model-header" onclick="toggleContent(this)">📂 linear</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-21-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-21-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-21-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-21-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.01
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="mlp">
+  <div class="model-header" onclick="toggleContent(this)">📂 mlp</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-22-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-22-default-Model Parameters">{
+  &quot;d_layers&quot;: [
+    384,
+    384
+  ],
+  &quot;dropout&quot;: 0.1
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-22-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-22-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-22-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-22-opt-Model Search Space">{
+  &quot;d_layers&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    1,
+    8,
+    64,
+    512
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-22-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-22-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.01
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="mlp_plr">
+  <div class="model-header" onclick="toggleContent(this)">📂 mlp_plr</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-23-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-23-default-Model Parameters">{
+  &quot;d_layers&quot;: [
+    510,
+    263,
+    363
+  ],
+  &quot;dropout&quot;: 0.2,
+  &quot;num_embeddings&quot;: {
+    &quot;type&quot;: &quot;PLREmbeddings&quot;,
+    &quot;n_frequencies&quot;: 77,
+    &quot;frequency_scale&quot;: 0.04431360576139521,
+    &quot;d_embedding&quot;: 34,
+    &quot;lite&quot;: true
+  }
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-23-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-23-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-23-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-23-opt-Model Search Space">{
+  &quot;d_layers&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    1,
+    8,
+    64,
+    1024
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ],
+  &quot;num_embeddings&quot;: {
+    &quot;n_frequencies&quot;: [
+      &quot;int&quot;,
+      16,
+      96
+    ],
+    &quot;frequency_scale&quot;: [
+      &quot;loguniform&quot;,
+      0.01,
+      100.0
+    ],
+    &quot;d_embedding&quot;: [
+      &quot;int&quot;,
+      16,
+      64
+    ]
+  }
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-23-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-23-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.01
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="modernnca">
+  <div class="model-header" onclick="toggleContent(this)">📂 modernNCA</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-24-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-24-default-Model Parameters">{
+  &quot;dim&quot;: 128,
+  &quot;dropout&quot;: 0.1,
+  &quot;d_block&quot;: 512,
+  &quot;n_blocks&quot;: 0,
+  &quot;temperature&quot;: 1,
+  &quot;num_embeddings&quot;: {
+    &quot;type&quot;: &quot;PLREmbeddings&quot;,
+    &quot;n_frequencies&quot;: 77,
+    &quot;frequency_scale&quot;: 0.04431360576139521,
+    &quot;d_embedding&quot;: 34,
+    &quot;lite&quot;: true
+  },
+  &quot;sample_rate&quot;: 0.5
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-24-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-24-default-Training Parameters">{
+  &quot;lr&quot;: 0.01,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-24-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-24-opt-Model Search Space">{
+  &quot;dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;d_block&quot;: [
+    &quot;int&quot;,
+    64,
+    1024
+  ],
+  &quot;n_blocks&quot;: [
+    &quot;?int&quot;,
+    0,
+    0,
+    2
+  ],
+  &quot;dim&quot;: [
+    &quot;int&quot;,
+    64,
+    1024
+  ],
+  &quot;num_embeddings&quot;: {
+    &quot;n_frequencies&quot;: [
+      &quot;int&quot;,
+      16,
+      96
+    ],
+    &quot;frequency_scale&quot;: [
+      &quot;loguniform&quot;,
+      0.005,
+      10.0
+    ],
+    &quot;d_embedding&quot;: [
+      &quot;int&quot;,
+      16,
+      64
+    ]
+  },
+  &quot;sample_rate&quot;: [
+    &quot;uniform&quot;,
+    0.05,
+    0.6
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-24-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-24-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="node">
+  <div class="model-header" onclick="toggleContent(this)">📂 node</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-25-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-25-default-Model Parameters">{
+  &quot;num_layers&quot;: 1,
+  &quot;depth&quot;: 6,
+  &quot;layer_dim&quot;: 1024,
+  &quot;tree_dim&quot;: 2,
+  &quot;choice_function&quot;: &quot;sparsemax&quot;,
+  &quot;bin_function&quot;: &quot;sparsemoid&quot;
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-25-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-25-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-25-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-25-opt-Model Search Space">{
+  &quot;num_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    4
+  ],
+  &quot;depth&quot;: [
+    &quot;int&quot;,
+    4,
+    6
+  ],
+  &quot;tree_dim&quot;: [
+    &quot;int&quot;,
+    2,
+    3
+  ],
+  &quot;layer_dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      512,
+      1024
+    ]
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-25-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-25-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="protogate">
+  <div class="model-header" onclick="toggleContent(this)">📂 protogate</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-26-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-26-default-Model Parameters">{
+  &quot;a&quot;: 1,
+  &quot;sigma&quot;: 0.5,
+  &quot;hidden_layer_list&quot;: [
+    200
+  ]
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-26-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-26-default-Training Parameters">{
+  &quot;lr&quot;: 0.1,
+  &quot;weight_decay&quot;: 1e-05,
+  &quot;pred_k&quot;: 3,
+  &quot;lam&quot;: 0.001,
+  &quot;l1_coef&quot;: 0.0002,
+  &quot;pred_coef&quot;: 1,
+  &quot;sorting_tau&quot;: 16,
+  &quot;feature_selection&quot;: true
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-26-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-26-opt-Model Search Space">{
+  &quot;hidden_layer_list&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    1,
+    4,
+    64,
+    512
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-26-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-26-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.05,
+      0.075,
+      0.1
+    ]
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ],
+  &quot;l1_coef&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.0001,
+      0.0002,
+      0.0003,
+      0.0004,
+      0.0006
+    ]
+  ],
+  &quot;pred_k&quot;: [
+    &quot;categorical&quot;,
+    [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="ptarl">
+  <div class="model-header" onclick="toggleContent(this)">📂 ptarl</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-27-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-27-default-Model Parameters">{
+  &quot;n_clusters&quot;: 20,
+  &quot;d_embedding&quot;: 64,
+  &quot;d_layers&quot;: [
+    256,
+    256
+  ],
+  &quot;dropout&quot;: 0.2,
+  &quot;regularize&quot;: true
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-27-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-27-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+<div class="section-title">General Parameters <button class="btn" onclick="copyToClipboard('copy-model-27-default-General Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-27-default-General Parameters">{
+  &quot;ot_weight&quot;: 0.25,
+  &quot;diversity_weight&quot;: 0.25,
+  &quot;r_weight&quot;: 0.25,
+  &quot;diversity&quot;: true
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-27-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-27-opt-Model Search Space">{
+  &quot;d_layers&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    1,
+    3,
+    64,
+    512
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ],
+  &quot;d_embedding&quot;: [
+    &quot;int&quot;,
+    64,
+    128
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-27-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-27-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="realmlp">
+  <div class="model-header" onclick="toggleContent(this)">📂 realmlp</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-28-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-28-default-Model Parameters">{
+  &quot;num_emb_type&quot;: &quot;pbld&quot;,
+  &quot;add_front_scale&quot;: true,
+  &quot;lr&quot;: 0.04,
+  &quot;p_drop&quot;: 0.15,
+  &quot;act&quot;: &quot;selu&quot;,
+  &quot;hidden_sizes&quot;: [
+    256,
+    256,
+    256
+  ],
+  &quot;wd&quot;: 0.02,
+  &quot;plr_sigma&quot;: 0.1,
+  &quot;ls_eps&quot;: 0.1
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-28-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-28-opt-Model Search Space">{
+  &quot;num_emb_type&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;none&quot;,
+      &quot;pbld&quot;,
+      &quot;pl&quot;,
+      &quot;plr&quot;
+    ]
+  ],
+  &quot;add_front_scale&quot;: [
+    &quot;categorical&quot;,
+    [
+      true,
+      false
+    ]
+  ],
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    0.02,
+    0.3
+  ],
+  &quot;p_drop&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.0,
+      0.15,
+      0.3
+    ]
+  ],
+  &quot;act&quot;: [
+    &quot;categorical&quot;,
+    [
+      &quot;selu&quot;,
+      &quot;relu&quot;,
+      &quot;mish&quot;
+    ]
+  ],
+  &quot;hidden_sizes&quot;: [
+    &quot;categorical&quot;,
+    [
+      [
+        256,
+        256,
+        256
+      ],
+      [
+        64,
+        64,
+        64,
+        64,
+        64
+      ],
+      [
+        512
+      ]
+    ]
+  ],
+  &quot;wd&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.0,
+      0.02
+    ]
+  ],
+  &quot;plr_sigma&quot;: [
+    &quot;loguniform&quot;,
+    0.05,
+    0.5
+  ],
+  &quot;ls_eps&quot;: [
+    &quot;categorical&quot;,
+    [
+      0.0,
+      0.1
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="resnet">
+  <div class="model-header" onclick="toggleContent(this)">📂 resnet</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-29-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-29-default-Model Parameters">{
+  &quot;d&quot;: 192,
+  &quot;d_hidden_factor&quot;: 2.0,
+  &quot;hidden_dropout&quot;: 0.3,
+  &quot;n_layers&quot;: 2,
+  &quot;residual_dropout&quot;: 0.0,
+  &quot;activation&quot;: &quot;relu&quot;,
+  &quot;normalization&quot;: &quot;batchnorm&quot;
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-29-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-29-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-29-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-29-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    8
+  ],
+  &quot;d&quot;: [
+    &quot;int&quot;,
+    64,
+    512
+  ],
+  &quot;d_hidden_factor&quot;: [
+    &quot;uniform&quot;,
+    1.0,
+    4.0
+  ],
+  &quot;hidden_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;residual_dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-29-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-29-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.01
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="saint">
+  <div class="model-header" onclick="toggleContent(this)">📂 saint</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-30-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-30-default-Model Parameters">{
+  &quot;depth&quot;: 6,
+  &quot;heads&quot;: 8,
+  &quot;dim&quot;: 32,
+  &quot;attn_dropout&quot;: 0.0,
+  &quot;ff_dropout&quot;: 0.0,
+  &quot;attentiontype&quot;: &quot;colrow&quot;,
+  &quot;cont_embeddings&quot;: &quot;MLP&quot;
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-30-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-30-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.01
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-30-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-30-opt-Model Search Space">{
+  &quot;depth&quot;: [
+    &quot;categorical&quot;,
+    [
+      4,
+      6
+    ]
+  ],
+  &quot;heads&quot;: [
+    &quot;categorical&quot;,
+    [
+      4,
+      8
+    ]
+  ],
+  &quot;dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      16,
+      32,
+      64
+    ]
+  ],
+  &quot;attn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ff_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;attentiontype&quot;: [
+    &quot;?categorical&quot;,
+    &quot;colrow&quot;,
+    [
+      &quot;colrow&quot;,
+      &quot;row&quot;,
+      &quot;col&quot;
+    ]
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-30-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-30-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    3e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.0001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="snn">
+  <div class="model-header" onclick="toggleContent(this)">📂 snn</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-31-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-31-default-Model Parameters">{
+  &quot;d_layers&quot;: [
+    384,
+    384
+  ],
+  &quot;dropout&quot;: 0.2,
+  &quot;d_embedding&quot;: 64
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-31-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-31-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-31-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-31-opt-Model Search Space">{
+  &quot;d_layers&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    2,
+    16,
+    1,
+    512
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.1
+  ],
+  &quot;d_embedding&quot;: [
+    &quot;int&quot;,
+    64,
+    512
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-31-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-31-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.01
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="svm">
+  <div class="model-header" onclick="toggleContent(this)">📂 svm</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-32-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-32-opt-Model Search Space">{
+  &quot;C&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    100000.0
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="switchtab">
+  <div class="model-header" onclick="toggleContent(this)">📂 switchtab</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-33-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-33-default-Model Parameters">{
+  &quot;num_heads&quot;: 2,
+  &quot;alpha&quot;: 1.0
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-33-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-33-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-33-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-33-opt-Model Search Space">{
+  &quot;alpha&quot;: [
+    &quot;loguniform&quot;,
+    0.01,
+    100
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-33-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-33-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="t2gformer">
+  <div class="model-header" onclick="toggleContent(this)">📂 t2gformer</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-34-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-34-default-Model Parameters">{
+  &quot;token_bias&quot;: true,
+  &quot;n_layers&quot;: 3,
+  &quot;d_token&quot;: 192,
+  &quot;n_heads&quot;: 8,
+  &quot;d_ffn_factor&quot;: 1.3333333333333333,
+  &quot;attention_dropout&quot;: 0.2,
+  &quot;ffn_dropout&quot;: 0.1,
+  &quot;residual_dropout&quot;: 0.0,
+  &quot;activation&quot;: &quot;reglu&quot;,
+  &quot;prenormalization&quot;: false,
+  &quot;initialization&quot;: &quot;kaiming&quot;,
+  &quot;kv_compression&quot;: null,
+  &quot;kv_compression_sharing&quot;: null,
+  &quot;sym_weight&quot;: true,
+  &quot;sym_topology&quot;: false,
+  &quot;nsi&quot;: true
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-34-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-34-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 1e-05,
+  &quot;frozen_switch&quot;: true
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-34-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-34-opt-Model Search Space">{
+  &quot;n_layers&quot;: [
+    &quot;int&quot;,
+    1,
+    4
+  ],
+  &quot;d_token&quot;: [
+    &quot;categorical&quot;,
+    [
+      8,
+      16,
+      32,
+      64,
+      128
+    ]
+  ],
+  &quot;residual_dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.2
+  ],
+  &quot;attention_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ffn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;d_ffn_factor&quot;: [
+    &quot;uniform&quot;,
+    0.6666666666666667,
+    2.6666666666666665
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-34-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-34-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ],
+  &quot;frozen_switch&quot;: [
+    &quot;categorical&quot;,
+    [
+      true,
+      false
+    ]
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabautopnpnet">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabautopnpnet</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-35-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-35-default-Model Parameters">{
+  &quot;num_fourier_features&quot;: 100,
+  &quot;max_poly_terms&quot;: 5,
+  &quot;poly_type&quot;: &quot;chebyshev&quot;,
+  &quot;hidden_size&quot;: 256,
+  &quot;use_residual&quot;: true
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-35-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-35-default-Training Parameters">{
+  &quot;lr&quot;: 0.05,
+  &quot;weight_decay&quot;: 0.001
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-35-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-35-opt-Model Search Space">{
+  &quot;num_fourier_features&quot;: [
+    10,
+    25,
+    50,
+    75,
+    100
+  ],
+  &quot;max_poly_terms&quot;: [
+    2,
+    3,
+    5,
+    7,
+    10
+  ],
+  &quot;poly_type&quot;: [
+    &quot;chebyshev&quot;,
+    &quot;legendre&quot;,
+    &quot;hermite&quot;,
+    &quot;laguerre&quot;
+  ],
+  &quot;hidden_size&quot;: [
+    64,
+    128,
+    256,
+    512
+  ],
+  &quot;use_residual&quot;: [
+    false,
+    true
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-35-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-35-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    0.0005,
+    0.005,
+    0.05
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabcaps">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabcaps</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-36-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-36-default-Model Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0002,
+  &quot;sub_class&quot;: 3,
+  &quot;init_dim&quot;: 16,
+  &quot;primary_capsule_size&quot;: 16,
+  &quot;digit_capsule_size&quot;: 16,
+  &quot;leaves&quot;: 16
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-36-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-36-opt-Model Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ],
+  &quot;sub_class&quot;: [
+    &quot;int&quot;,
+    1,
+    5
+  ],
+  &quot;init_dim&quot;: [
+    &quot;int&quot;,
+    32,
+    128
+  ],
+  &quot;primary_capsule_size&quot;: [
+    &quot;int&quot;,
+    4,
+    32
+  ],
+  &quot;digit_capsule_size&quot;: [
+    &quot;int&quot;,
+    4,
+    32
+  ],
+  &quot;leaves&quot;: [
+    &quot;int&quot;,
+    16,
+    64
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabicl">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabicl</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    <em>No default parameters available.</em>
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="tabm">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabm</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-38-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-38-default-Model Parameters">{
+  &quot;arch_type&quot;: &quot;tabm&quot;,
+  &quot;k&quot;: 32,
+  &quot;num_embeddings&quot;: {
+    &quot;type&quot;: &quot;PLREmbeddings&quot;,
+    &quot;n_frequencies&quot;: 77,
+    &quot;frequency_scale&quot;: 0.04431360576139521,
+    &quot;d_embedding&quot;: 34,
+    &quot;lite&quot;: true
+  },
+  &quot;backbone&quot;: {
+    &quot;type&quot;: &quot;MLP&quot;,
+    &quot;n_blocks&quot;: 2,
+    &quot;d_block&quot;: 384,
+    &quot;dropout&quot;: 0.1
+  }
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-38-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-38-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-38-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-38-opt-Model Search Space">{
+  &quot;num_embeddings&quot;: {
+    &quot;n_frequencies&quot;: [
+      &quot;int&quot;,
+      16,
+      96
+    ],
+    &quot;frequency_scale&quot;: [
+      &quot;loguniform&quot;,
+      0.005,
+      10.0
+    ],
+    &quot;d_embedding&quot;: [
+      &quot;int&quot;,
+      16,
+      64
+    ]
+  },
+  &quot;backbone&quot;: {
+    &quot;n_blocks&quot;: [
+      &quot;int&quot;,
+      1,
+      5
+    ],
+    &quot;d_block&quot;: [
+      &quot;int&quot;,
+      64,
+      1024
+    ],
+    &quot;dropout&quot;: [
+      &quot;uniform&quot;,
+      0.0,
+      0.5
+    ]
+  }
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-38-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-38-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    0.0001,
+    0.005
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    0.0001,
+    0.1
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabnet">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabnet</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-39-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-39-default-Model Parameters">{
+  &quot;lr&quot;: 0.01,
+  &quot;gamma&quot;: 1.3,
+  &quot;n_steps&quot;: 3,
+  &quot;n_independent&quot;: 2,
+  &quot;n_shared&quot;: 2,
+  &quot;momentum&quot;: 0.02
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-39-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-39-opt-Model Search Space">{
+  &quot;lr&quot;: [
+    &quot;uniform&quot;,
+    0.001,
+    0.01
+  ],
+  &quot;gamma&quot;: [
+    &quot;uniform&quot;,
+    1,
+    2
+  ],
+  &quot;n_steps&quot;: [
+    &quot;int&quot;,
+    3,
+    10
+  ],
+  &quot;n_independent&quot;: [
+    &quot;int&quot;,
+    1,
+    5
+  ],
+  &quot;n_shared&quot;: [
+    &quot;int&quot;,
+    1,
+    5
+  ],
+  &quot;momentum&quot;: [
+    &quot;uniform&quot;,
+    0.01,
+    0.4
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabpfn">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabpfn</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">General Parameters <button class="btn" onclick="copyToClipboard('copy-model-40-default-General Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-40-default-General Parameters">{
+  &quot;sample_size&quot;: 3000
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="tabptm">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabptm</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-41-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-41-default-Model Parameters">{
+  &quot;d_layers&quot;: [
+    510,
+    263,
+    363
+  ],
+  &quot;dropout&quot;: 0.2
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-41-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-41-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    <em>No search space defined.</em>
+  </div>
+</div>
+
+<div class="model" data-model="tabr">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabr</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-42-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-42-default-Model Parameters">{
+  &quot;num_embeddings&quot;: {
+    &quot;type&quot;: &quot;PLREmbeddings&quot;,
+    &quot;n_frequencies&quot;: 77,
+    &quot;frequency_scale&quot;: 0.04431360576139521,
+    &quot;d_embedding&quot;: 34,
+    &quot;lite&quot;: true
+  },
+  &quot;d_main&quot;: 265,
+  &quot;context_dropout&quot;: 0.38920071545944357,
+  &quot;d_multiplier&quot;: 2.0,
+  &quot;encoder_n_blocks&quot;: 0,
+  &quot;predictor_n_blocks&quot;: 1,
+  &quot;mixer_normalization&quot;: &quot;auto&quot;,
+  &quot;dropout0&quot;: 0.38852797479169876,
+  &quot;dropout1&quot;: 0.0,
+  &quot;normalization&quot;: &quot;LayerNorm&quot;,
+  &quot;activation&quot;: &quot;ReLU&quot;
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-42-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-42-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003121273641315169,
+  &quot;weight_decay&quot;: 1.2260352006404615e-06
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-42-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-42-opt-Model Search Space">{
+  &quot;d_main&quot;: [
+    &quot;int&quot;,
+    96,
+    384
+  ],
+  &quot;context_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.6
+  ],
+  &quot;encoder_n_blocks&quot;: [
+    &quot;int&quot;,
+    0,
+    1
+  ],
+  &quot;predictor_n_blocks&quot;: [
+    &quot;int&quot;,
+    1,
+    2
+  ],
+  &quot;dropout0&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.6
+  ],
+  &quot;num_embeddings&quot;: {
+    &quot;n_frequencies&quot;: [
+      &quot;int&quot;,
+      16,
+      96
+    ],
+    &quot;frequency_scale&quot;: [
+      &quot;loguniform&quot;,
+      0.01,
+      100.0
+    ],
+    &quot;d_embedding&quot;: [
+      &quot;int&quot;,
+      16,
+      64
+    ]
+  }
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-42-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-42-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    3e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tabtransformer">
+  <div class="model-header" onclick="toggleContent(this)">📂 tabtransformer</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-43-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-43-default-Model Parameters">{
+  &quot;dim&quot;: 32,
+  &quot;depth&quot;: 6,
+  &quot;heads&quot;: 8,
+  &quot;attn_dropout&quot;: 0.08,
+  &quot;ff_dropout&quot;: 0.3
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-43-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-43-default-Training Parameters">{
+  &quot;lr&quot;: 0.0001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-43-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-43-opt-Model Search Space">{
+  &quot;dim&quot;: [
+    &quot;categorical&quot;,
+    [
+      32,
+      64,
+      128,
+      256
+    ]
+  ],
+  &quot;depth&quot;: [
+    &quot;categorical&quot;,
+    [
+      1,
+      2,
+      3,
+      6,
+      12
+    ]
+  ],
+  &quot;heads&quot;: [
+    &quot;categorical&quot;,
+    [
+      2,
+      4,
+      8
+    ]
+  ],
+  &quot;attn_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ],
+  &quot;ff_dropout&quot;: [
+    &quot;uniform&quot;,
+    0.0,
+    0.5
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-43-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-43-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.1
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="tangos">
+  <div class="model-header" onclick="toggleContent(this)">📂 tangos</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-44-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-44-default-Model Parameters">{
+  &quot;d_layers&quot;: [
+    256,
+    256,
+    256
+  ],
+  &quot;dropout&quot;: 0.1,
+  &quot;lambda1&quot;: 1,
+  &quot;lambda2&quot;: 0.01,
+  &quot;subsample&quot;: 50
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-44-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-44-default-Training Parameters">{
+  &quot;lr&quot;: 0.001,
+  &quot;weight_decay&quot;: 0.0002
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-44-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-44-opt-Model Search Space">{
+  &quot;d_layers&quot;: [
+    &quot;$mlp_d_layers&quot;,
+    1,
+    8,
+    64,
+    512
+  ],
+  &quot;dropout&quot;: [
+    &quot;?uniform&quot;,
+    0.0,
+    0.0,
+    0.5
+  ],
+  &quot;lambda1&quot;: [
+    &quot;loguniform&quot;,
+    0.001,
+    10
+  ],
+  &quot;lambda2&quot;: [
+    &quot;loguniform&quot;,
+    0.0001,
+    1
+  ],
+  &quot;subsample&quot;: [
+    &quot;int&quot;,
+    30,
+    100
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-44-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-44-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    0.0001,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;?loguniform&quot;,
+    0.0,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="trompt">
+  <div class="model-header" onclick="toggleContent(this)">📂 trompt</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-45-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-45-default-Model Parameters">{
+  &quot;P&quot;: 128,
+  &quot;d&quot;: 128,
+  &quot;n_cycles&quot;: 6
+}</code></pre>
+
+<div class="section-title">Training Parameters <button class="btn" onclick="copyToClipboard('copy-model-45-default-Training Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-45-default-Training Parameters">{
+  &quot;lr&quot;: 0.0003,
+  &quot;weight_decay&quot;: 1e-05
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-45-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-45-opt-Model Search Space">{
+  &quot;n_cycles&quot;: [
+    &quot;int&quot;,
+    3,
+    8
+  ],
+  &quot;d&quot;: [
+    &quot;categorical&quot;,
+    [
+      32,
+      64,
+      128,
+      256
+    ]
+  ],
+  &quot;P&quot;: [
+    &quot;categorical&quot;,
+    [
+      32,
+      64,
+      128,
+      256
+    ]
+  ]
+}</code></pre>
+
+<div class="section-title">Training Search Space <button class="btn" onclick="copyToClipboard('copy-model-45-opt-Training Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-45-opt-Training Search Space">{
+  &quot;lr&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    0.001
+  ],
+  &quot;weight_decay&quot;: [
+    &quot;loguniform&quot;,
+    1e-06,
+    0.001
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<div class="model" data-model="xgboost">
+  <div class="model-header" onclick="toggleContent(this)">📂 xgboost</div>
+  <div class="config-content">
+    <div class="section-title">Default Configuration</div>
+    
+<div class="section-title">Fit Parameters <button class="btn" onclick="copyToClipboard('copy-model-46-default-Fit Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-46-default-Fit Parameters">{
+  &quot;verbose&quot;: false
+}</code></pre>
+
+<div class="section-title">Model Parameters <button class="btn" onclick="copyToClipboard('copy-model-46-default-Model Parameters')">Copy</button></div>
+<pre><code class="json" id="copy-model-46-default-Model Parameters">{
+  &quot;subsample&quot;: 0.8,
+  &quot;colsample_bytree&quot;: 0.8,
+  &quot;early_stopping_rounds&quot;: 50,
+  &quot;booster&quot;: &quot;gbtree&quot;,
+  &quot;n_estimators&quot;: 2000,
+  &quot;n_jobs&quot;: -1,
+  &quot;tree_method&quot;: &quot;hist&quot;
+}</code></pre>
+
+    <div class="section-title">Search Space</div>
+    
+<div class="section-title">Model Search Space <button class="btn" onclick="copyToClipboard('copy-model-46-opt-Model Search Space')">Copy</button></div>
+<pre><code class="json" id="copy-model-46-opt-Model Search Space">{
+  &quot;alpha&quot;: [
+    &quot;?loguniform&quot;,
+    0,
+    1e-08,
+    100.0
+  ],
+  &quot;colsample_bylevel&quot;: [
+    &quot;uniform&quot;,
+    0.5,
+    1.0
+  ],
+  &quot;colsample_bytree&quot;: [
+    &quot;uniform&quot;,
+    0.5,
+    1.0
+  ],
+  &quot;gamma&quot;: [
+    &quot;?loguniform&quot;,
+    0,
+    1e-08,
+    100.0
+  ],
+  &quot;lambda&quot;: [
+    &quot;?loguniform&quot;,
+    0,
+    1e-08,
+    100.0
+  ],
+  &quot;learning_rate&quot;: [
+    &quot;loguniform&quot;,
+    1e-05,
+    1
+  ],
+  &quot;max_depth&quot;: [
+    &quot;int&quot;,
+    3,
+    10
+  ],
+  &quot;min_child_weight&quot;: [
+    &quot;loguniform&quot;,
+    1e-08,
+    100000.0
+  ],
+  &quot;subsample&quot;: [
+    &quot;uniform&quot;,
+    0.5,
+    1.0
+  ]
+}</code></pre>
+
+  </div>
+</div>
+
+<script>
+hljs.highlightAll();
+
+function toggleContent(header) {
+    const content = header.nextElementSibling;
+    content.style.display = content.style.display === "block" ? "none" : "block";
+}
+
+function toggleAll(expand) {
+    document.querySelectorAll('.config-content').forEach(div => {
+        div.style.display = expand ? "block" : "none";
+    });
+}
+
+function filterModels(query) {
+    query = query.toLowerCase();
+    document.querySelectorAll('.model').forEach(div => {
+        div.style.display = div.dataset.model.includes(query) ? "block" : "none";
+    });
+}
+
+function copyToClipboard(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Copied to clipboard!");
+    }, () => {
+        alert("❌ Failed to copy.");
+    });
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+}
+
+function toggleSearchBox() {
+    const input = document.getElementById("search-input");
+    input.style.display = input.style.display === "none" ? "block" : "none";
+}
+</script>
+</body>
+</html>
